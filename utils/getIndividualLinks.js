@@ -25,8 +25,10 @@ const getLinks = async url => {
     let $ = cheerio.load(body);
 
     $(".border-box h2 a").each((index, element) => {
-      const individualLink = $(element).attr("href");
-      announces.push(individualLink);
+      if (!$(element).parents(".proiect").length) {
+        const individualLink = $(element).attr("href");
+        announces.push(individualLink);
+      }
     });
 
     return announces;
@@ -34,9 +36,9 @@ const getLinks = async url => {
 };
 
 const getAllLinks = async () => {
-  const pages = await getNumberOfPages();
+  // const pages = await getNumberOfPages();
 
-  for (let i = 1; i < pages + 1; i++) {
+  for (let i = 1; i < 1 + 1; i++) {
     if (i === 1) {
       await getLinks(baseUrl);
     } else {

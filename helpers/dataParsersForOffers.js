@@ -1,6 +1,7 @@
 const {
   REGEX_NUMBER: regexNumber,
-  REGEX_TEXT: regexText
+  REGEX_TEXT: regexText,
+  SEARCH_FIELDS: fields
 } = require("../constants");
 
 /* Method that returns the price of the offer in this format */
@@ -60,29 +61,29 @@ const getDetails = $ => {
         .text()
         .split(":");
 
-      if (parsedString[0] === "Nr. camere") {
+      if (parsedString[0] === fields.ROOMS) {
         response.numberOfRooms = parseInt(parsedString[1]);
-      } else if (parsedString[0] === "Suprafaţă utilă") {
+      } else if (parsedString[0] === fields.UTIL_SURFACE) {
         const surface = parsedString[1].match(/^[0-9]*/);
         response.utilSurface = parseFloat(surface);
-      } else if (parsedString[0] === "Suprafaţă construită") {
+      } else if (parsedString[0] === fields.BUILD_SURFACE) {
         const surface = parsedString[1].match(/^[0-9]*/);
         response.buildSurface = parseFloat(surface);
-      } else if (parsedString[0] === "Compartimentare") {
+      } else if (parsedString[0] === fields.PARTITIONED) {
         response.partitioned = parsedString[1];
-      } else if (parsedString[0] === "Confort") {
+      } else if (parsedString[0] === fields.CONFORT) {
         response.confort = parsedString[1];
-      } else if (parsedString[0] === "Etaj") {
+      } else if (parsedString[0] === fields.FLOOR) {
         response.floor = parsedString[1];
-      } else if (parsedString[0] === "Nr. bucătării") {
+      } else if (parsedString[0] === fields.KITCHENS) {
         response.kitchens = parseInt(parsedString[1]);
-      } else if (parsedString[0] === "Nr. băi") {
+      } else if (parsedString[0] === fields.BATHROOMS) {
         response.bathrooms = parseInt(parsedString[1]);
-      } else if (parsedString[0] === "An construcţie") {
+      } else if (parsedString[0] === fields.BUILD_YEAR) {
         response.buildYear = parseInt(parsedString[1]);
-      } else if (parsedString[0] === "Tip imobil") {
+      } else if (parsedString[0] === fields.REAL_ESTATE_TYPE) {
         response.realEstateType = parsedString[1];
-      } else if (parsedString[0] === "Regim înălţime") {
+      } else if (parsedString[0] === fields.HEIGHT_LEVEL) {
         response.heightRegime = parsedString[1];
       }
     }

@@ -36,9 +36,9 @@ const getLinks = async url => {
 };
 
 const getAllLinks = async () => {
-  // const pages = await getNumberOfPages();
+  const pages = await getNumberOfPages();
 
-  for (let i = 1; i < 1 + 1; i++) {
+  for (let i = 1; i < pages + 1; i++) {
     if (i === 1) {
       await getLinks(baseUrl);
     } else {
@@ -50,4 +50,4 @@ const getAllLinks = async () => {
   return announces;
 };
 
-module.exports = getAllLinks;
+module.exports = {getAllLinks, getLinks};

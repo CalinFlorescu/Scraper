@@ -1,4 +1,4 @@
-const getLinks = require("./getIndividualLinks");
+const {getAllLinks} = require("./getIndividualLinks");
 const request = require("request-promise");
 const cheerio = require("cheerio");
 const {
@@ -30,31 +30,29 @@ const {
 const offers = [];
 
 const getOffers = async () => {
-  const links = await getLinks();
+  const links = await getAllLinks();
 
-  links.forEach(async link => {
-    const offer = await request({
-      method: "GET",
-      url: link
-    }).then(body => {
-      const $ = cheerio.load(body);
-
+  for(const link of links) {
       try {
+        const body = await request({
+          method: "GET",
+          url: link
+        });
+
+        const $ = cheerio.load(body);
         const price = getPrice($);
         const location = getLocation($);
         const details = getDetails($);
 
-        return { price, location, ...details };
+        offers.push({price, location, ...details});
       } catch (err) {
         console.error(err);
       }
-    });
-
-    offers.push(offer);
-    console.log(offer);
-  });
+  }
 
   return offers;
 };
 
-getOffers();
+getOffers().then(() => console.log(resp));
+
+module.exports = getOffers;

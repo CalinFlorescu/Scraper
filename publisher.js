@@ -1,35 +1,43 @@
 const amqp = require('amqplib/callback_api');
 const { BASE_URL: baseUrl } = require("./config");
+const { getNumberOfPages } = require('./utils/getIndividualLinks');
 
-amqp.connect('amqp://localhost', (errorZero, connection) => {
-   if (errorZero) {
-       throw errorZero;
-   }
+const startPublisher = async () => {
+    const pages = await getNumberOfPages();
 
-   connection.createChannel((errorOne, channel) => {
-       if (errorOne) {
-           throw errorOne;
-       }
+    amqp.connect('amqp://localhost', (errorZero, connection) => {
+        if (errorZero) {
+            throw errorZero;
+        }
 
-       const queue = 'links';
-       const msg = baseUrl;
+        connection.createChannel((errorOne, channel) => {
+            if (errorOne) {
+                throw errorOne;
+            }
 
-       channel.assertQueue(queue, {
-           durable: false
-       });
+            const queue = 'links';
+            const msg = baseUrl;
 
-       for(let i = 1; i < 286; i++) {
-           if (i === 1) {
-               channel.sendToQueue(queue, Buffer.from(msg));
-               console.log(`[x] sent ${msg}`);
-           }
-           channel.sendToQueue(queue, Buffer.from(`${msg}/?pagina=${i}`));
-           console.log(`[x] sent ${msg}`);
-       }
-   });
+            channel.assertQueue(queue, {
+                durable: false
+            });
 
-   setTimeout(() => {
-       connection.close();
-       process.exit(0);
-   }, 500);
-});
+            for(let i = 1; i < pages; i++) {
+                if (i === 1) {
+                    channel.sendToQueue(queue, Buffer.from(msg));
+                    console.log(`[x] sent ${msg}`);
+                } else {
+                    channel.sendToQueue(queue, Buffer.from(`${msg}/?pagina=${i}`));
+                    console.log(`[x] sent ${msg}/?pagina=${i}`);
+                }
+            }
+        });
+
+        setTimeout(() => {
+            connection.close();
+            process.exit(0);
+        }, 500);
+    });
+};
+
+startPublisher();

@@ -29,10 +29,7 @@ const {
 
 const offers = [];
 
-const getOffers = async () => {
-  const links = await getAllLinks();
-
-  for(const link of links) {
+const getOffers = async (link) => {
       try {
         const body = await request({
           method: "GET",
@@ -48,11 +45,10 @@ const getOffers = async () => {
       } catch (err) {
         console.error(err);
       }
-  }
 
   return offers;
 };
 
-getOffers().then(() => console.log(resp));
+// getOffers().then(() => console.log(resp));
 
 module.exports = getOffers;

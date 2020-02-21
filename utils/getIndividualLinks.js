@@ -50,4 +50,4 @@ const getAllLinks = async () => {
   return announces;
 };
 
-module.exports = {getAllLinks, getLinks};
+module.exports = {getAllLinks, getLinks, getNumberOfPages};
